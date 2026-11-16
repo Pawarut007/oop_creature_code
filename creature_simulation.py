@@ -61,6 +61,32 @@ class SwimmingCreature(Creature):
             target.hp = 0
         print(f"{target.name} HP is now {target.hp}")
 
+class FireCreature(Creature):
+    def __init__(self, name, hp, attack_power):
+        super().__init__(name, hp, attack_power)
+        self.fire_level = 0
+
+    def emit_fire(self, new_fire_level):
+        if 0 <= new_fire_level <= 100:
+            self.fire_level = new_fire_level
+            print(f"Fire Level: {self.fire_level}")
+        else:
+            print("Invalid Fire level")
+        
+    def attack(self, target):
+        if not self.is_alive():
+            print(f"{self.name} cannot attack because it is defeated.")
+            return
+
+        damage = int(self.attack_power * (1 + self.fire_level / 100))
+
+        print(f"{self.name} attacks from Ring of Fire at {self.fire_level} level")
+        print(f"It Burn {target.name} for {damage} damage!")
+        target.hp -= damage
+        if target.hp < 0:
+            target.hp = 0
+        print(f"{target.name} HP is now {target.hp}")
+
 if __name__ == "__main__":
     print("=== Creature Class Tests ===\n")
 
@@ -134,3 +160,13 @@ if __name__ == "__main__":
     print()
 
     print("=== Tests Completed ===")
+
+    print()
+    print("=== FireCreature Tests ===\n")
+    fire_dragon = FireCreature("Fire Dragon", 80, 10)
+    dummy = Creature("Dummy", 40, 0)
+    fire_dragon.emit_fire(50)
+    fire_dragon.attack(dummy)
+    print("Dummy HP should be 25")
+    fire_dragon.emit_fire(120)
+    print("The result should be Invalid Fire level")
